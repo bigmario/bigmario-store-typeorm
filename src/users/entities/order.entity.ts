@@ -7,9 +7,9 @@ export class Order {
   @Column({ type: 'varchar', length: 255 })
   date: Date;
 
-  @Column()
+  @Column(() => User)
   user: User;
 
-  @Column()
+  @Column(() => Product)
   products: Product[];
 }
