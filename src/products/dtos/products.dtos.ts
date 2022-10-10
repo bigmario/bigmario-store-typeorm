@@ -6,6 +6,7 @@ import {
   IsPositive,
 } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
+import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class CreateProductDto {
   @IsString()
@@ -29,10 +30,28 @@ export class CreateProductDto {
   @ApiProperty()
   readonly stock: number;
 
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  @ApiProperty()
+  readonly brandId: number;
+
   @IsUrl()
   @IsNotEmpty()
   @ApiProperty()
   readonly image: string;
+
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
