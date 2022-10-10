@@ -41,6 +41,7 @@ export class ProductsService {
     // newProduct.description = data.description;
     // newProduct.stock = data.stock;
     // newProduct.price = data.price;
+
     const newProduct = await this.productRepo.create(data);
     if (data.brandId) {
       const brand = await this.brandRepo.findOne({
@@ -75,5 +76,18 @@ export class ProductsService {
 
   async remove(id: number) {
     return await this.productRepo.delete(id);
+  }
+  async removeCategoryByProductId(productId: number, categoryId: number) {
+    const product = await this.productRepo.findOne({
+      relations: ['categories'],
+      where: {
+        id: productId,
+      },
+    });
+
+    product.categories = product.categories.filter(
+      (item) => item.id !== categoryId,
+    );
+    return this.productRepo.save(product);
   }
 }

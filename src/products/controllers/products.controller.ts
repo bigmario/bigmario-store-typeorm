@@ -74,4 +74,12 @@ export class ProductsController {
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
   }
+
+  @Delete(':id/category/:categoryId')
+  removeCategoryByProductId(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    return this.productsService.removeCategoryByProductId(id, categoryId);
+  }
 }
