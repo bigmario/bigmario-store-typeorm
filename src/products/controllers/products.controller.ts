@@ -10,6 +10,7 @@ import {
   HttpStatus,
   HttpCode,
   Res,
+  BadRequestException,
   // ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -52,8 +53,13 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() payload: CreateProductDto) {
-    return this.productsService.create(payload);
+  async create(@Body() payload: CreateProductDto) {
+    try {
+      const product = await this.productsService.create(payload);
+      return product;
+    } catch (error) {
+      throw new BadRequestException(error.detail);
+    }
   }
 
   @Put(':id')

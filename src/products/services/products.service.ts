@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -43,18 +39,12 @@ export class ProductsService {
     // newProduct.description = data.description;
     // newProduct.stock = data.stock;
     // newProduct.price = data.price;
-
-    try {
-      const newProduct = await this.productRepo.create(data);
-      if (data.brandId) {
-        const brand = await this.brandService.findOne(data.brandId);
-        newProduct.brand = brand;
-      }
-      return this.productRepo.save(newProduct);
-    } catch (error) {
-      console.log(error);
-      throw new BadRequestException(error);
+    const newProduct = await this.productRepo.create(data);
+    if (data.brandId) {
+      const brand = await this.brandService.findOne(data.brandId);
+      newProduct.brand = brand;
     }
+    return this.productRepo.save(newProduct);
   }
 
   async update(id: number, changes: UpdateProductDto) {
