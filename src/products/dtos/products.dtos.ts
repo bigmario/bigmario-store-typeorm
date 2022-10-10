@@ -4,6 +4,7 @@ import {
   IsUrl,
   IsNotEmpty,
   IsPositive,
+  IsArray,
 } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
@@ -35,6 +36,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   @ApiProperty()
   readonly brandId: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  @IsArray()
+  readonly categoriesIds: number[];
 
   @IsUrl()
   @IsNotEmpty()
