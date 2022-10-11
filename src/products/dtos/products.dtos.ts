@@ -5,6 +5,9 @@ import {
   IsNotEmpty,
   IsPositive,
   IsArray,
+  IsOptional,
+  Min,
+  ValidateIf,
 } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
@@ -61,3 +64,25 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
+
+export class FilterProductsDto {
+  @IsOptional()
+  @IsPositive()
+  @ApiProperty()
+  limit: number;
+
+  @IsOptional()
+  @Min(0)
+  @ApiProperty()
+  offset: number;
+
+  @IsOptional()
+  @IsPositive()
+  @ApiProperty()
+  minPrice: number;
+
+  @IsPositive()
+  @ApiProperty()
+  @ValidateIf((item) => item.minPrice)
+  maxPrice: number;
+}
