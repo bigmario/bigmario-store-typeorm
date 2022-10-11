@@ -2,27 +2,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Product } from '../../products/entities/product.entity';
 import { Order } from './order.entity';
-import { User } from './user.entity';
 
 @Entity()
-export class Customer {
+export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  lastName: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  phone: string;
+  @Column({ type: 'int' })
+  quantity: number;
 
   @CreateDateColumn({
     type: 'timestamptz',
@@ -36,9 +29,9 @@ export class Customer {
   })
   updatedAt: Date;
 
-  @OneToOne(() => User, (user) => user.customer, { nullable: true })
-  user: User;
+  @ManyToOne(() => Product)
+  product: Product;
 
-  @OneToMany(() => Order, (order) => order.customer)
-  orders: Order[];
+  @ManyToOne(() => Order, (order) => order.items)
+  order: Order;
 }

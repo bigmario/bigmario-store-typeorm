@@ -77,6 +77,7 @@ export class ProductsService {
   async remove(id: number) {
     return await this.productRepo.delete(id);
   }
+
   async removeCategoryByProductId(productId: number, categoryId: number) {
     const product = await this.productRepo.findOne({
       relations: ['categories'],
@@ -88,6 +89,24 @@ export class ProductsService {
     product.categories = product.categories.filter(
       (item) => item.id !== categoryId,
     );
+    return this.productRepo.save(product);
+  }
+
+  async addCategoryToProduct(productId: number, categoryId: number) {
+    const product = await this.productRepo.findOne({
+      relations: ['categories'],
+      where: {
+        id: productId,
+      },
+    });
+
+    const category = await this.categoryRepo.findOne({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    product.categories.push(category);
     return this.productRepo.save(product);
   }
 }
