@@ -27,7 +27,10 @@ export class ProductsService {
         price: Between(minPrice, maxPrice),
       };
       return await this.productRepo.find({
-        relations: ['brand', 'categories'],
+        relations: {
+          brand: true,
+          categories: true,
+        },
         take: limit,
         skip: offset,
         ...(queryParams?.minPrice && {
@@ -36,7 +39,10 @@ export class ProductsService {
       });
     }
     return await this.productRepo.find({
-      relations: ['brand', 'categories'],
+      relations: {
+        brand: true,
+        categories: true,
+      },
     });
   }
 
